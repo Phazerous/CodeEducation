@@ -1,31 +1,46 @@
 package org.example;
 
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
-        Car car = new Car("Bugatti", 1337);
-        ElectricCar electricCar = new ElectricCar("Lada", 228, 1000);
-
-        Car anonymous = new Car("Mazda", 1448) {
-            @Override
-            public void move() {
-                System.out.println("OOo-ram-zam-zam");
-            }
-        };
-
-        List<Car> cars = new ArrayList<>();
-        cars.add(car);
-        cars.add(electricCar);
-        cars.add(anonymous);
-
-        showCarInfo(cars);
+    public static void main(String[] args) throws FileNotFoundException {
+        readFileLines("src/main/resources/test.txt");
+        readNumbers("src/main/resources/test2.txt");
     }
 
-    public static void showCarInfo(List<? extends Car> list) {
-        for (Car car : list) {
-            car.move();
+    public static void readFileLines(String path) throws FileNotFoundException {
+        File file = new File(path);
+
+        Scanner scanner = new Scanner(file);
+
+        while(scanner.hasNextLine()) {
+            System.out.println(scanner.nextLine());
         }
+
+        scanner.close();
+    }
+    public static void readNumbers(String path) throws FileNotFoundException {
+        File file = new File(path);
+
+        Scanner scanner = new Scanner(file);
+
+        List<Integer> numbers = new ArrayList<>();
+
+        String[] stringNums = scanner.nextLine().split(" ");
+
+        for (String num : stringNums) {
+            numbers.add(Integer.parseInt(num));
+        }
+
+        int total = numbers.stream().reduce(0, (a, b) -> a + b);
+
+        System.out.println("Total sum of the numbers: " + total);
+
+        scanner.close();
     }
 }
